@@ -15,7 +15,7 @@ def get_files_recursive(caminho_p):
     if pasta.is_dir():
         file_list.extend(get_files_recursive(pasta))
     elif pasta.is_file():
-        if pasta.name.endswith(".png"):
+        if pasta.name.endswith(".png") or pasta.name.endswith(".jpg"):
             file_list.append(ImageClass(pasta.parent.name,pasta))
           
   return file_list
@@ -37,19 +37,24 @@ folha_template["Acer_Capillipes"] = "folhas/Acer_Capillipes/610.jpg"
 folha_template["Acer_Opalus"] = "folhas/Acer_Opalus/1.jpg"
 
 print("Formas carregadas:")
+print("len(formas): ", len(formas))
 for forma in formas:
     
-    pearson_correlation = CompareClass().pearson_correlation(forma_template.get(forma.classe), forma.caminho)
-    mse = CompareClass().mse(forma_template.get(forma.classe), forma.caminho)
-    forma.set_resultado_pearson(forma_template.get(forma.classe), pearson_correlation)
-    forma.set_resultado_mse(forma_template.get(forma.classe), mse)
+    pearson_correlation_forma = CompareClass().pearson_correlation(forma_template.get(forma.classe), forma.caminho)
+    mse_forma = CompareClass().mse(forma_template.get(forma.classe), forma.caminho)
+    forma.set_resultado_pearson(forma_template.get(forma.classe), pearson_correlation_forma)
+    forma.set_resultado_mse(forma_template.get(forma.classe), mse_forma)
     print(forma)
     
 ## AS FOLHAS NÃO TÊM O MESMO TAMANHO
-# print("Folhas carregadas:")
-# for folha in folhas:
-#     pearson_correlation = CompareClass().pearson_correlation(folha_template.get(folha.classe), folha.caminho)
-#     mse = CompareClass().mse(folha_template.get(folha.classe), folha.caminho)
-#     print(folha)
+print("Folhas carregadas:")
+print("len(folhas): ", len(folhas))
+for folha in folhas:
+
+    pearson_correlation_folha = CompareClass().pearson_correlation(folha_template.get(folha.classe), folha.caminho)
+    mse_folha = CompareClass().mse(folha_template.get(folha.classe), folha.caminho)
+    folha.set_resultado_pearson(folha_template.get(folha.classe), pearson_correlation_folha)
+    folha.set_resultado_mse(folha_template.get(folha.classe), mse_folha)
+    print(folha)
 
 

@@ -17,9 +17,16 @@ class CompareClass:
     
     def pearson_correlation(self, image1, image2):
         
+        i1 = Image.open(image1)
+        i2 = Image.open(image2)
+        
+        width, height = min(i1.size, i2.size)
+        img1 = i1.resize((width, height))
+        img2 = i2.resize((width, height))
+        
         # Carregar as imagens como arrays NumPy
-        img1_array = np.array(Image.open(image1))
-        img2_array = np.array(Image.open(image2))
+        img1_array = np.array(img1)
+        img2_array = np.array(img2)
 
         # Transformar as matrizes 2D das imagens em vetores 1D
         img1_vector = img1_array.flatten()
@@ -32,8 +39,16 @@ class CompareClass:
 
     def mse(self, image1, image2):
 
-        img1_array = np.array(Image.open(image1))
-        img2_array = np.array(Image.open(image2))
+        i1 = Image.open(image1)
+        i2 = Image.open(image2)
+        
+        width, height = min(i1.size, i2.size)
+        img1 = i1.resize((width, height))
+        img2 = i2.resize((width, height))
+        
+        # Carregar as imagens como arrays NumPy
+        img1_array = np.array(img1)
+        img2_array = np.array(img2)
 
         img1_vector = img1_array.flatten()
         img2_vector = img2_array.flatten()
