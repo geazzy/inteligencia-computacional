@@ -8,6 +8,8 @@ numpy = "*"
 scipy = "*"
 pillow = "*"
 scikit-learn = "*"
+ipython = "*"
+opencv-python = "*"
 
 [dev-packages]
 ipykernel = "*"
