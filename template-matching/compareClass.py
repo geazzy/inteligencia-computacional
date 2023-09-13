@@ -1,28 +1,24 @@
 import numpy as np
 from scipy.stats import pearsonr
 from sklearn.metrics import mean_squared_error
-from PIL import Image #https://github.com/python-pillow/Pillow
+# import matplotlib.pyplot as plt #apenas para mostrar as imagens no jupyter
 import cv2
 
 class CompareClass:
     
-    def pearson_correlation(self, image1, image2):
-        i1 = Image.open(image1)
-        i2 = Image.open(image2)
-        
-        # Redimensionar as imagens
-        # if image_type == "folha":
-        if i1.size != i2.size:
-            width, height = min(i1.size, i2.size)
-            img1 = i1.resize((width, height))
-            img2 = i2.resize((width, height))
-        else:
-            img1 = i1
-            img2 = i2
+    def pearson_correlation(self, image1, image2, resize=(200, 200), border_color=(0, 0, 0)):
 
+        # img1_array = img1 = self.openImage(str(image1), resize, border_color)
+        # img2_array = img2 = self.openImage(str(image2), resize, border_color)
+        # print("imagens")
+        # plt.imshow(img1)
+        # plt.show()
+        # plt.imshow(img2)
+        # plt.show()
+       
         # Carregar as imagens como arrays NumPy
-        img1_array = np.array(img1)
-        img2_array = np.array(img2)
+        img1_array = self.openImage(str(image1), resize, border_color)
+        img2_array = self.openImage(str(image2), resize, border_color)
 
         # Transformar as matrizes 2D das imagens em vetores 1D
         img1_vector = img1_array.flatten()
@@ -34,23 +30,11 @@ class CompareClass:
         return correlation.statistic
     
 
-    def mse(self, image1, image2):
-        i1 = Image.open(image1)
-        i2 = Image.open(image2)
-        
-        # Redimensionar as imagens
-        # if image_type == "folha":
-        if i1.size != i2.size:
-            width, height = min(i1.size, i2.size)
-            img1 = i1.resize((width, height))
-            img2 = i2.resize((width, height))
-        else:
-            img1 = i1
-            img2 = i2
-        
+    def mse(self, image1, image2, resize=(200, 200), border_color=(0, 0, 0)):
+
         # Carregar as imagens como arrays NumPy
-        img1_array = np.array(img1)
-        img2_array = np.array(img2)
+        img1_array = np.array(self.openImage(str(image1), resize, border_color))
+        img2_array = np.array(self.openImage(str(image2), resize, border_color))
 
         # Transformar as matrizes 2D das imagens em vetores 1D
         img1_vector = img1_array.flatten()
@@ -62,7 +46,7 @@ class CompareClass:
         return mse
     
 
-    def openImage(self, filename, resize=(60, 60), border_color=(255,255,255)):
+    def openImage(self, filename, resize=(200, 200), border_color=(255,255,255)):
         image = cv2.imread(filename)
         h, w = image.shape[0], image.shape[1]
         if h != w:
@@ -73,7 +57,7 @@ class CompareClass:
         return image #npy array
 
 
-    def count_pixels(self, filename, num_parts=3, resize=(60, 60), border_color=(255,255,255)):
+    def count_pixels(self, filename, num_parts=3, resize=(200, 200), border_color=(255,255,255)):
         image = self.openImage(filename, resize, border_color)
         width, height = image.shape[0], image.shape[1]
 
