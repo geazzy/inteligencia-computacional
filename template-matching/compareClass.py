@@ -76,11 +76,10 @@ class CompareClass:
                 lower = upper + part_height
 
                 # Retorna o quadrante da imagem
-                # part = image.crop((left, upper, right, lower))
                 part = image[left:right, upper:lower]
 
-                # Contar os pixels pretos (assumindo que valores próximos de 0 são pretos)
-                black_pixels = np.sum(np.array(part) <= 128)
+                # Contar os pixels pretos (assumindo que 0 são pretos)
+                black_pixels = np.sum(np.array(part) == 0)
 
                 # Adicionar a contagem à lista
                 counts.append(black_pixels)
@@ -93,7 +92,3 @@ class CompareClass:
         mse = mean_squared_error(array1, array2)
         return (correlation.statistic, mse)
 
-
-# c = CompareClass()
-# x = c.count_pixels('fourShapes/circle/1187.png')
-# print(x)
