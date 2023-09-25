@@ -3,19 +3,23 @@ import random
 
 class Utils:
 
-  def get_files(self, caminho_p):
+  @staticmethod
+  def get_files(caminho_p):
     file_dict = {}
+    i=0
     for pasta in Path(caminho_p).iterdir():
       if pasta.is_dir():
         file_dict[pasta.name] = []
         
         for file in Path(pasta).iterdir():
             if file.is_file() and (file.name.endswith(".png") or file.name.endswith(".jpg")):
-                file_dict[pasta.name].append(file)
+              i+=1
+              file_dict[pasta.name].append(file)
+    print(f"numero de arquivos: ", i)
     return file_dict
   
-
-  def get_random_images(self, dict_images):
+  @staticmethod
+  def get_random_images(dict_images):
     conjunto = {}
     for item in dict_images:
         template_i = random.randint(0, len(dict_images[item]) - 1)
