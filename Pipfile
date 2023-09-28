@@ -11,9 +11,11 @@ scikit-learn = "*"
 ipython = "*"
 opencv-python = "*"
 matplotlib = "*"
+yellowbrick = "*"
 
 [dev-packages]
 ipykernel = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.11"
