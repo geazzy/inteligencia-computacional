@@ -5,7 +5,9 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+# from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+# from sklearn.metrics import precision_score, recall_score
+from sklearn.metrics import f1_score
 
 def hu_moments(image, quadrants=(1,1)):
     # Tamanho dos quadrantes
@@ -70,9 +72,7 @@ def get_files(caminho_p):
                     file_dict[pasta.name].append(file)
     return file_dict
 
-
-
-def createX_huX_bp(database, quadrantes):
+def createXy(database, quadrantes):
     X_hu, X_bp, y = list(), list(), list()
 
     for classe in database:
@@ -95,31 +95,47 @@ def treino_teste_normalizado(X, y):
 
 def knn(neighbors, X_train, y_train, X_test):
 
-    knn_hu = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
-    knn_hu.fit(X_train, y_train)
-    y_pred = knn_hu.predict(X_test)
+    knn = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
+    knn.fit(X_train, y_train)
+    y_pred = knn.predict(X_test)
     return y_pred
 
-################## MAIN ##################
+# def get_report(y_test, y_pred):
+
+#     return f1_score(y_test, y_pred, average='weighted')
+
+
+def print_report(y_test, y_pred):
+    # print('Accuracy: {:.4f}'.format(accuracy_score(y_test, y_pred)))
+    # print('Weighted - ponderada')
+    print('F1 Score: {:.4f}'.format(f1_score(y_test, y_pred, average='weighted')))
+    # print('Precision Score: {:.4f}'.format(precision_score(y_test, y_pred, average='weighted')))
+    # print('Recall Score: {:.4f}'.format(recall_score(y_test, y_pred, average='weighted')))
+
 
 database = get_files('../fourShapes/')
-quadrantes = (2,2)
-neighbors = 3
 
-X_hu, X_bp, y = createX_huX_bp(database, quadrantes)
+params = {'neighbors': [1, 3, 5], 'quadrantes': [1, 2, 3, 4, 5] }
+classes = ['circle', 'square', 'triangle']
+f1_results_hu = {}
+f1_results_bp = {}
 
-X_hu_train, X_hu_test, y_hu_train, y_hu_test = treino_teste_normalizado(X_hu, y)
-X_bp_train, X_bp_test, y_bp_train, y_bp_test = treino_teste_normalizado(X_bp, y)
 
-y_hu_pred = knn(neighbors, X_hu_train, y_hu_train, X_hu_test)
-y_bp_pred = knn(neighbors, X_bp_train, y_bp_train, X_bp_test)
-
-print("HU")
-print("Accuracy: ", accuracy_score(y_hu_test, y_hu_pred))
-print("Confusion Matrix: \n", confusion_matrix(y_hu_test, y_hu_pred))
-print("Classification Report: \n", classification_report(y_hu_test, y_hu_pred))
-print("\n")
-print("BP")
-print("Accuracy: ", accuracy_score(y_bp_test, y_bp_pred))
-print("Confusion Matrix: \n", confusion_matrix(y_bp_test, y_bp_pred))
-print("Classification Report: \n", classification_report(y_bp_test, y_bp_pred))
+for neighbor in params['neighbors']:
+    for quadrante in params['quadrantes']:
+        X_hu, X_bp, y = createXy(database, (quadrante, quadrante))
+        X_hu_train, X_hu_test, y_hu_train, y_hu_test = treino_teste_normalizado(X_hu, y)
+        X_bp_train, X_bp_test, y_bp_train, y_bp_test = treino_teste_normalizado(X_bp, y)
+        y_hu_pred = knn(neighbor, X_hu_train, y_hu_train, X_hu_test)
+        y_bp_pred = knn(neighbor, X_bp_train, y_bp_train, X_bp_test)
+        
+        # f1_results_hu.append(f1_score(y_hu_test, y_hu_pred, average='weighted'))
+        # f1_results_bp.append(f1_score(y_bp_test, y_bp_pred, average='weighted'))
+        f1_results_hu[(neighbor, quadrante)] = f1_score(y_hu_test, y_hu_pred, average='weighted')
+        f1_results_bp[(neighbor, quadrante)] = f1_score(y_bp_test, y_bp_pred, average='weighted')
+            
+        print("===============================================================")
+        print("KNN com {} vizinhos e {} quadrantes".format(neighbor, quadrante))
+        print_report(y_hu_test,y_hu_pred)
+        print()
+        print_report(y_bp_test,y_bp_pred)
