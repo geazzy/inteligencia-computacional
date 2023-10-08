@@ -12,6 +12,8 @@ ipython = "*"
 opencv-python = "*"
 matplotlib = "*"
 yellowbrick = "*"
+pandas = "*"
+natsort = "*"
 
 [dev-packages]
 ipykernel = "*"
