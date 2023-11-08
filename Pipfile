@@ -15,6 +15,7 @@ yellowbrick = "*"
 pandas = "*"
 natsort = "*"
 scikit-image = "==0.20"
+sklearn-genetic-opt = {extras = ["all"], version = "*"}
 
 [dev-packages]
 ipykernel = "*"
