@@ -38,10 +38,10 @@ def main():
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.fit_transform(X_test)
     
-    n_components = [16, 32, 64, 128, 256, 512]
+    #genetico(X_train, X_test, y_train, y_test)
+    combinacoes(X_train, X_test, y_train, y_test)
     
-    genetico(X_train, X_test, y_train, y_test)
-    
+    # n_components = [16, 32, 64, 128, 256, 512]
     # for n in n_components:
     #     pca = decomposition.PCA(n)
     #     pca.fit(X_train)
@@ -54,6 +54,24 @@ def main():
     #     print('X_test_pca: ', X_test_pca.shape)
     #     print('X_test: ', X_test.shape)
     #     classificadores(X_train_pca, X_test_pca, y_train, y_test)
+def combinacoes(X_train, X_test, y_train, y_test):
+    from sklearn.ensemble import VotingClassifier
+    pca = decomposition.PCA(512)
+    pca.fit(X_train)
+    X_train_pca = pca.transform(X_train)
+    X_test_pca = pca.transform(X_test)
+    print('\n********************** combine *************************')
+    start_time = time.time()
+    
+    clf1 = KNeighborsClassifier(n_neighbors=1, metric='euclidean')
+    clf2 = tree.DecisionTreeClassifier()
+ 
+    voting_clf = VotingClassifier(estimators=[('lr', clf1), ('dt', clf2)], voting='soft')
+    voting_clf.fit(X_train_pca, y_train)
+    predictions = voting_clf.predict(X_test_pca)
+    
+    print("--- %s seconds ---" % (time.time() - start_time))
+    print(classification_report(y_test, predictions, zero_division=0))
 
 def genetico(X_train, X_test, y_train, y_test):
     pca = decomposition.PCA(512)
