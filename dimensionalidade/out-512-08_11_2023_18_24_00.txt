@@ -1,5 +1,0 @@
-
-Y_train - classes uniques:  301
-Y_test - classes uniques:  301
-
-********************** alg. genetico *************************

@@ -1,7 +1,0 @@
-
-Y_train - classes uniques:  301
-Y_test - classes uniques:  301
-
-********************** alg. genetico *************************
-gen	nevals	fitness 	fitness_std	fitness_max	fitness_min
-0  	50    	0.526091	0.0883852  	0.699889   	0.305648   
