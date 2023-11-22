@@ -1,5 +1,5 @@
 #bases muito grandes para serem colocadas no git
-# datasets/*
+datasets/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
